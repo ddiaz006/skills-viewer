@@ -55,7 +55,10 @@ DEFAULT_CONFIG = {
          for d in ("GitHub", "src", "code", "projects") for depth in ("*/", "*/*/")
          for agent_dir in (".claude", ".agents")],
     "exclude": ["*/node_modules*", "*/tests/fixtures*"],
-    "budgets": {},
+    # Claude Code reportedly lists skill descriptions up to ~1% of the model's context window (unofficial; not in
+    # Anthropic's docs). Shown as a bar with a context-size toggle. Other agents: totals only, unless you set a budget.
+    "budgets": {"Claude Code": {"fraction": 0.01, "contexts": [200000, 1000000],
+                                "note": "Unofficial estimate: ~1% of the model's context window."}},
 }
 
 

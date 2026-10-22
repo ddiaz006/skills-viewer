@@ -56,6 +56,8 @@ h1 { margin: 0; font-size: 30px; letter-spacing: -.01em; }
 .meter > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
 .meter.over > i { background: var(--err); }
 .budget small { color: var(--muted); font-size: 12px; }
+.budget .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.budget .seg button { padding: 3px 9px; font-size: 12px; }
 .toolbar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
   padding: 12px 0; margin: 16px 0 8px; background: var(--bg); border-bottom: 1px solid var(--line); }
 .search { flex: 1 1 280px; position: relative; }
@@ -239,7 +241,23 @@ footer ul { margin: 6px 0 0; padding-left: 18px; }
   ].map(function (x) { return '<div class="stat"><b>' + x[0] + "</b><span>" + x[1] + "</span></div>"; }).join("");
   $("stats").innerHTML = statHtml;
 
-  $("budgets").innerHTML = DATA.groups.map(function (g) {
+  var fmtCtx = function (c) { return c >= 1000000 ? (c / 1000000) + "M" : Math.round(c / 1000) + "K"; };
+  function fractionBudget(g) {
+    var b = g.budget, ctxs = b.contexts && b.contexts.length ? b.contexts : [200000];
+    var sel = Number(store.get("skills-ctx-" + g.agent)); if (ctxs.indexOf(sel) < 0) sel = ctxs[0];
+    var lim = Math.round(b.fraction * sel), over = g.tokens > lim, pct = Math.min(100, 100 * g.tokens / lim);
+    return '<div class="budget" title="' + esc(b.note || "") + '"><div class="top"><b>' + esc(g.agent) + "</b><span>" + g.skills +
+      " skills always listed</span></div>" +
+      '<div class="meter' + (over ? " over" : "") + '"><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+      "<small>~" + g.tokens.toLocaleString() + " tokens of names + descriptions (" + g.chars.toLocaleString() +
+      " characters) in every session, " + (over ? "<b>over</b>" : "within") + " a ~" + lim.toLocaleString() + "-token listing budget (" +
+      +(b.fraction * 100).toFixed(2) + "% of a " + fmtCtx(sel) + " context window" + (b.note ? "; estimate" : "") + ")</small>" +
+      '<div class="row"><small>' + esc(g.sources.join(", ")) + '</small><div class="seg" role="group" aria-label="Model context window">' +
+      ctxs.map(function (c) { return '<button data-agent="' + esc(g.agent) + '" data-ctx="' + c + '" aria-pressed="' + (c === sel) + '">' +
+        fmtCtx(c) + "</button>"; }).join("") + "</div></div></div>";
+  }
+  function drawBudgets() { $("budgets").innerHTML = DATA.groups.map(function (g) {
+    if (g.budget && typeof g.budget === "object") return fractionBudget(g);
     var pct = g.budget ? Math.min(100, 100 * g.chars / g.budget) : 0;
     var over = g.budget && g.chars > g.budget;
     return '<div class="budget"><div class="top"><b>' + esc(g.agent) + "</b><span>" + g.skills +
@@ -248,8 +266,12 @@ footer ul { margin: 6px 0 0; padding-left: 18px; }
       "<small>" + g.chars.toLocaleString() + " characters of names + descriptions (~" + g.tokens.toLocaleString() +
       " tokens) in every session" + (g.budget ? (over ? ", <b>over</b> the ~" : " of a ~") + g.budget.toLocaleString() +
       "-character budget" : "") + " · " + esc(g.sources.join(", ")) + "</small></div>";
-  }).join("");
-  if (DATA.groups.length) $("budgets").title = DATA.budget_note;
+  }).join(""); }
+  drawBudgets();
+  $("budgets").addEventListener("click", function (e) {
+    var bt = e.target.closest("[data-ctx]"); if (!bt) return;
+    store.set("skills-ctx-" + bt.getAttribute("data-agent"), bt.getAttribute("data-ctx")); drawBudgets();
+  });
 
   var srcs = {};
   S.forEach(function (s) { s._sources.forEach(function (x) { srcs[x] = (srcs[x] || 0) + 1; }); });

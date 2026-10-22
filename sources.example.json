@@ -14,8 +14,8 @@
   ],
   "exclude": ["*/node_modules*", "*/tests/fixtures*"],
   "budgets": {
-    "_readme": "Optional. Characters of skill names + descriptions an agent lists before it drops or shortens entries. Limits vary by agent, version and model, so these numbers are placeholders: set them to what your agents allow, or delete them to show totals only. Keys match the 'agent' field of installed sources.",
-    "Claude Code": 8000,
+    "_readme": "Optional. How much of the skill list (names + descriptions) an agent shows before it drops or shortens entries. Either a character count or {fraction, contexts}: a share of the model's context window in tokens, with the context sizes to toggle between. Limits vary by agent, version and model; the values below are estimates and placeholders. Keys match the 'agent' field of installed sources.",
+    "Claude Code": {"fraction": 0.01, "contexts": [200000, 1000000], "note": "Unofficial estimate: ~1% of the model's context window."},
     "Codex / OpenCode / Cursor": 8000
   }
 }

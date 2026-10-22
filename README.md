@@ -46,10 +46,17 @@ Context cost follows the progressive-disclosure model of the Agent Skills spec:
 2. **When the skill triggers**: the `SKILL.md` body.
 3. **Only if opened**: bundled files (`references/`, `scripts/`, `assets/`).
 
-The summary at the top adds up tier 1 for each agent: the characters of names and descriptions it
-lists in every session. Agents cap how much of that list they show and drop or shorten entries past
-the cap, and the cap varies by agent, version and model. If you know your agent's limit, set it under
-`budgets` in `sources.json` and the summary shows a bar against it.
+The summary at the top adds up tier 1 for each agent: the names and descriptions it lists in every
+session. Agents cap how much of that list they show and drop or shorten entries past the cap. The cap
+is set by each agent, not by the Agent Skills standard, and it changes with the agent's version and
+the model's context window.
+
+- **Claude Code** gets a bar by default, using an unofficial estimate: about 1% of the model's context
+  window (roughly 2,000 tokens at 200K, 10,000 at 1M). Anthropic doesn't document this; the toggle on
+  the bar switches the context size, and the page remembers your choice.
+- **Other agents** show totals only. If you know a limit, set it under `budgets` in `sources.json`,
+  either as a character count (`"Codex / OpenCode / Cursor": 8000`) or as a fraction of context
+  (`{"fraction": 0.01, "contexts": [200000, 1000000]}`).
 
 ## Checks
 
