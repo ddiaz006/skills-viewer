@@ -1,0 +1,21 @@
+{
+  "_readme": "Copy to sources.json and edit. Without a sources.json the script uses built-in defaults (the per-user skill folders of common agents, plus project skills under ~/GitHub, ~/src, ~/code and ~/projects). kind: installed = an agent lists these in every session; project = loaded inside that repo; catalog = cloned but not installed. Installed folders are scanned one level deep (what agents load); set recursive: true to scan a whole tree. Globs (*) are allowed; missing paths are skipped.",
+  "sources": [
+    {"label": "Claude Code (user)", "kind": "installed", "agent": "Claude Code", "path": "~/.claude/skills"},
+    {"label": "Claude Code plugin", "kind": "installed", "agent": "Claude Code", "path": "~/.claude/plugins", "type": "claude-plugins"},
+    {"label": "~/.agents", "kind": "installed", "agent": "Codex / OpenCode / Cursor", "path": "~/.agents/skills"},
+    {"label": "Codex (user)", "kind": "installed", "agent": "Codex / OpenCode / Cursor", "path": "~/.codex/skills"},
+    {"label": "OpenCode (user)", "kind": "installed", "agent": "Codex / OpenCode / Cursor", "path": "~/.config/opencode/skills"},
+
+    {"label": "Project", "kind": "project", "path": "~/src/*/.claude/skills"},
+
+    {"label": "anthropics/skills", "kind": "catalog", "path": "~/src/skills", "recursive": true},
+    {"label": "My skill repo", "kind": "catalog", "path": "~/src/my-skills", "recursive": true}
+  ],
+  "exclude": ["*/node_modules*", "*/tests/fixtures*"],
+  "budgets": {
+    "_readme": "Characters of skill names + descriptions an agent lists before truncating. Estimates: set them to what your agents actually allow.",
+    "Claude Code": 8000,
+    "Codex / OpenCode / Cursor": 8000
+  }
+}

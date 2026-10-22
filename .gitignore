@@ -1,0 +1,8 @@
+# Generated page: embeds your local paths and the full text of every SKILL.md it finds
+skills.html
+*.html.tmp
+# Your personal source list (may name private repos); sources.example.json is the shared template
+sources.json
+__pycache__/
+*.pyc
+.DS_Store
