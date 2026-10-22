@@ -14,7 +14,7 @@
   ],
   "exclude": ["*/node_modules*", "*/tests/fixtures*"],
   "budgets": {
-    "_readme": "Characters of skill names + descriptions an agent lists before truncating. Estimates: set them to what your agents actually allow.",
+    "_readme": "Optional. Characters of skill names + descriptions an agent lists before it drops or shortens entries. Limits vary by agent, version and model, so these numbers are placeholders: set them to what your agents allow, or delete them to show totals only. Keys match the 'agent' field of installed sources.",
     "Claude Code": 8000,
     "Codex / OpenCode / Cursor": 8000
   }

@@ -46,10 +46,10 @@ Context cost follows the progressive-disclosure model of the Agent Skills spec:
 2. **When the skill triggers**: the `SKILL.md` body.
 3. **Only if opened**: bundled files (`references/`, `scripts/`, `assets/`).
 
-The bar at the top adds up tier 1 per agent and compares it with a description budget (default
-8,000 characters for Claude Code and for Codex, the limits the
-[genesis-skills](https://github.com/AI-ModCon/genesis-skills) validator models). Treat the budgets as
-estimates and set your own in `sources.json`.
+The summary at the top adds up tier 1 for each agent: the characters of names and descriptions it
+lists in every session. Agents cap how much of that list they show and drop or shorten entries past
+the cap, and the cap varies by agent, version and model. If you know your agent's limit, set it under
+`budgets` in `sources.json` and the summary shows a bar against it.
 
 ## Checks
 

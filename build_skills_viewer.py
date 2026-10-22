@@ -55,7 +55,7 @@ DEFAULT_CONFIG = {
          for d in ("GitHub", "src", "code", "projects") for depth in ("*/", "*/*/")
          for agent_dir in (".claude", ".agents")],
     "exclude": ["*/node_modules*", "*/tests/fixtures*"],
-    "budgets": {"Claude Code": 8000, "Codex / OpenCode / Cursor": 8000},
+    "budgets": {},
 }
 
 
